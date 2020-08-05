@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package helloworld;
+
+option java_multiple_files = true;
+option java_package = "io.grpc.example.helloworld";
+option java_outer_classname = "HelloWorldProto";
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {} //IMP
+  rpc StreamHelloReply (HelloRequest) returns (stream HelloReply) {} //IMP
+  rpc StreamHelloRequest (stream HelloRequest) returns (HelloReply) {}
+  rpc StreamHello (stream HelloRequest) returns (stream HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}

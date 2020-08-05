@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id "com.google.protobuf" version "0.8.12"
+    id 'idea'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+protobuf {
+    protoc { artifact = 'com.google.protobuf:protoc:3.11.4' }
+    plugins {
+        grpc { artifact = 'io.grpc:protoc-gen-grpc-java:1.30.2' }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+
+    generatedFilesBaseDir = "$projectDir/src/generated"
+}
+
+idea {
+    module {
+        sourceDirs += file("${projectDir}/src/generated/main/java");
+        sourceDirs += file("${projectDir}/src/generated/main/grpc");
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'io.grpc:grpc-all:1.30.2'
+}
+
+task runServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'io.grpc.example.helloworld.HelloWorldServer'
+}
+
+task runClient(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'io.grpc.example.helloworld.HelloWorldClient'
+}
